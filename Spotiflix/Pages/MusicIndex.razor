@@ -1,0 +1,62 @@
+﻿@inject NavigationManager UriHelper
+@page "/MusicIndex"
+@* Denne er lidt doven, men film delen sugede alt livet ud af mig. *@
+@* Hvad jeg gerne ville have gjort var en csv upload, og jeg prøvede. Fik csv upload delen til at virke, men at finde en søgefunktion der kunne du (Meget nemmere med ruby/rails) *@
+<div class="indexBody">
+    <header>
+        <RadzenButton Click=@(args => OnClick("Danger button")) Text="Return To Movie Search" ButtonStyle="ButtonStyle.Danger" />
+    </header>
+</div>
+<div class="bg-body text-center">
+    <table class="table bg-white">
+        <thead>
+        <tr style="cursor:pointer;">
+            <th>#</th>
+            <th>Artist</th>
+            <th>album</th>
+            <th>release</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (Musica Musica in Music)
+        {
+            <tr>
+                <td>@Musica.id</td>
+                <td>@Musica.artist</td>
+                <td>@Musica.album</td>
+                <td>@Musica.release.ToString("dddd MMMM d, yyyy")</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+@code {
+    class Musica
+    {
+        public int id;
+        public string artist;
+        public string album;
+        public DateTime release;
+
+        public Musica(int ID, string Artist, string Album, DateTime Release)
+        {
+            id = ID;
+            artist = Artist;
+            album = Album;
+            release = Release;
+        }
+    }
+    List<Musica> Music = new();
+
+    protected override void OnInitialized()
+    {
+        Music.Add(new Musica(1, "Opeth", "Damnation", new DateTime(1990, 9, 9)));
+        Music.Add(new Musica(2, "Fleetwood Mac", "Rumors", new DateTime(1977, 2, 4)));
+        Music.Add(new Musica(3, "Slayer", "Reign In Blood", new DateTime(1986, 10, 7)));
+    }
+    void OnClick(string buttonName)
+    {
+        UriHelper.NavigateTo("/");
+    }
+
+}
